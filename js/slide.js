@@ -2,7 +2,8 @@ export default class Slide{
   constructor(slideWrapper, slide){
     this.wrapper = document.querySelector(slideWrapper);
     this.slide = document.querySelector(slide);
-    this.distance = {finalPosition: 0, startX: 0, movement: 0}
+    this.distance = {finalPosition: 0, startX: 0, movement: 0};
+    this.slideArray;
   }
 
   moveSlide(distanceX){
@@ -53,9 +54,45 @@ export default class Slide{
     this.wrapper.addEventListener('touchend', this.onEnd)
   }
 
+  slidePosition(slide){
+    const margin = (this.wrapper.offsetWidth - slide.offsetWidth) / 2;
+    return -(slide.offsetLeft - margin);
+  }
+
+  slideIndexNav(index){
+    const last = this.slideArray.length - 1;
+
+    this.index = {
+      before: index ? index - 1 : undefined,
+      current: index,
+      after: index != last ? index + 1 : undefined
+    };
+
+    console.log(this.index)
+  }
+
+  changeSlide(index){
+    const activeItem = this.slideArray[index]
+    this.moveSlide(activeItem.position)
+    this.slideIndexNav(index)
+    this.distance.finalPosition = activeItem.position
+  }
+
+  slideConfig(){
+    this.slideArray = [...this.slide.children].map((element) => {
+      const position = this.slidePosition(element);
+      return {
+        position,
+        element
+      }
+    });
+    console.log(this.slideArray)
+  }
+
   init(){
     this.binds()
     this.addSlideEvents();
+    this.slideConfig();
     return this
   }
 }
