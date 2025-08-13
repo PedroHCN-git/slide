@@ -6,6 +6,10 @@ export default class Slide{
     this.slideArray;
   }
 
+  transition(active){
+    this.slide.style.transition = active ? 'transform .3s' : ''
+  }
+
   moveSlide(distanceX){
     this.distance.movePosition = distanceX;
     this.slide.style.transform = `translate3d(${distanceX}px, 0, 0)`;
@@ -17,6 +21,7 @@ export default class Slide{
   }
 
   onStart(event){
+    this.transition(false)
     let movetype;
     if (event.type === 'mousedown'){
       event.preventDefault();
@@ -36,9 +41,22 @@ export default class Slide{
   }
 
   onEnd(event){
+    debugger
     const movetype = (event.type === 'mouseup') ? 'mousemove' : 'touchstart'
     this.wrapper.removeEventListener(movetype, this.onMove);
     this.distance.finalPosition = this.distance.movePosition;
+    this.transition(true)
+    this.changeSlideOnEnd();
+  }
+
+  changeSlideOnEnd(){
+    if (this.distance.movement > 120 && this.index.next !== undefined){
+      this.changeNextSlide();
+    } else if (this.distance.movement < -120 && this.index.prev !== undefined) {
+      this.changePrevSlide();
+    } else {
+      this.changeSlide(this.index.current);
+    }
   }
 
   binds(){
@@ -63,12 +81,10 @@ export default class Slide{
     const last = this.slideArray.length - 1;
 
     this.index = {
-      before: index ? index - 1 : undefined,
+      prev: index ? index - 1 : undefined,
       current: index,
-      after: index != last ? index + 1 : undefined
+      next: index != last ? index + 1 : undefined
     };
-
-    console.log(this.index)
   }
 
   changeSlide(index){
@@ -86,13 +102,22 @@ export default class Slide{
         element
       }
     });
-    console.log(this.slideArray)
+  }
+
+  changeNextSlide(){
+    if (this.index.next !== undefined) this.changeSlide(this.index.next);
+  }
+
+  changePrevSlide(){
+    if (this.index.prev !== undefined) this.changeSlide(this.index.prev);
   }
 
   init(){
     this.binds()
+    this.transition(true)
     this.addSlideEvents();
     this.slideConfig();
+    this.slideIndexNav(0)
     return this
   }
 }
