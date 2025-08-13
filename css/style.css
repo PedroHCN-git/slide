@@ -42,3 +42,23 @@ img{
   opacity: 1;
   transform: scale(1);
 }
+
+[data-control='slide']{
+  display: flex;
+  justify-content: center;
+}
+
+[data-control='slide'] li a{
+  display: block;
+  background-color: orange;
+  width: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  text-indent: -999px;
+  margin: 5px;
+}
+
+[data-control='slide'] li.active a, [data-control='slide'] li a:hover{
+  background-color: #E54;
+}
