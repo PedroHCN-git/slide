@@ -1,6 +1,6 @@
 import debounce from "./debounce.js";
 
-export default class Slide{
+export class Slide{
   constructor(slideWrapper, slide){
     this.wrapper = document.querySelector(slideWrapper);
     this.slide = document.querySelector(slide);
@@ -49,7 +49,6 @@ export default class Slide{
     this.distance.finalPosition = this.distance.movePosition;
     this.transition(true)
     this.changeSlideOnEnd();
-    this.changeActiveClass();
   }
 
   changeSlideOnEnd(){
@@ -67,6 +66,8 @@ export default class Slide{
     this.onMove = this.onMove.bind(this);
     this.onEnd = this.onEnd.bind(this);
     this.onResize = debounce(this.onResize.bind(this), 200);
+    this.changeNextSlide = this.changeNextSlide.bind(this);
+    this.changePrevSlide = this.changePrevSlide.bind(this);
   }
 
   addSlideEvents(){
@@ -96,6 +97,7 @@ export default class Slide{
     this.moveSlide(activeItem.position);
     this.slideIndexNav(index);
     this.distance.finalPosition = activeItem.position;
+    this.changeActiveClass();
   }
 
   slideConfig(){
@@ -117,7 +119,6 @@ export default class Slide{
   }
 
   changeActiveClass(){
-    debugger
     this.slideArray.forEach(item => {
       item.element.classList.remove(this.activeClass);
     });
@@ -144,5 +145,18 @@ export default class Slide{
     this.changeActiveClass();
     this.addResizeEvent();
     return this
+  }
+}
+
+export class SlideNav extends Slide{
+  addArrow(next, prev){
+    this.next = document.querySelector(next);
+    this.prev = document.querySelector(prev);
+    this.addArrowEvent();
+  }
+
+  addArrowEvent(){
+    this.next.addEventListener('click', this.changeNextSlide);
+    this.prev.addEventListener('click', this.changePrevSlide);
   }
 }
