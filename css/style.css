@@ -29,7 +29,6 @@ img{
   width: 80vw;
   max-width: 800px;
   margin: 0 20px;
-
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,.4);
@@ -61,4 +60,47 @@ img{
 
 [data-control='slide'] li.active a, [data-control='slide'] li a:hover{
   background-color: #E54;
+}
+
+.arrow-nav{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.arrow-nav button{
+  box-shadow: none;
+  border: none;
+  width: 60px;
+  height: 60px;
+  margin-top: 20px;
+  background:  #E54 url(../img/arrow.svg) center center no-repeat;
+  color: white;
+}
+
+.arrow-nav button.prev{
+  transform: rotate(-180deg);
+}
+
+.custom-nav{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.custom-nav li{
+  margin: 40px 20px 40px 20px;
+  width: 80px;
+  height: 80px;
+  opacity: .8;
+  transform: scale(.8);
+  transition: .3s;
+}
+
+.custom-nav li img{
+  border-radius: 50%;
+}
+
+.custom-nav li.active{
+  opacity: 1;
+  transform: scale(1);
 }
